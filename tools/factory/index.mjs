@@ -32,7 +32,7 @@ const args = yargs(process.argv.slice(2))
         'js-enter': { default: "", describe: 'Insert string at the top of the JS file', type: 'string' },
         'js-exit': { default: "", describe: 'Insert string at the bottom of the JS file', type: 'string' },
         'js-export': { default: "", describe: 'JavaScript module name', type: 'string' },
-        'minify': { default: false, describe: 'Include minified CSS, HTML, and JS files to the output as well', type: 'boolean' },
+        'minify': { default: false, describe: 'Include minified files to the output as well', type: 'boolean' },
         'mjs': { default: false, describe: 'Include MJS files to the output as well', type: 'boolean' },
         'mjs-enter': { default: "", describe: 'Insert string at the top of the MJS file', type: 'string' },
         'mjs-exit': { default: "", describe: 'Insert string at the bottom of the MJS file', type: 'string' },
