@@ -79,10 +79,10 @@ const importPlugin = {
             };
         });
         build.onLoad({ filter: /.*/, namespace: 'link' }, async a => {
-            console.log('Fetch `' + a.path + '`');
+            log('Fetch', a.path);
             const r = await fetch(a.path);
             if (!r.ok) {
-                args.shut || console.error('Could not fetch `' + at(a.path) + '`');
+                args.shut || log('Could not fetch', a.path, 31);
                 return;
             }
             return {
@@ -137,6 +137,14 @@ const writePlugin = minify => ({
     }
 });
 
+const log = (task, path, color) => {
+    if (path.includes('://')) {
+        console.log('\x1b[' + (color ?? 32) + 'm●\x1b[0m ' + task + ' `' + path + '`');
+    } else {
+        console.log('\x1b[' + (color ?? 34) + 'm●\x1b[0m ' + task + ' `' + at(path) + '`');
+    }
+};
+
 const logPlugin = {
     name: 'log',
     setup(build) {
@@ -145,7 +153,7 @@ const logPlugin = {
                 return;
             }
             for (const file of Object.keys(result.metafile?.outputs ?? {})) {
-                console.log('Create file `' + at(file) + '`');
+                log('Create file', file);
             }
         });
     }
@@ -222,11 +230,11 @@ if (args.prune) {
             ].includes(testTo)) {
                 continue;
             }
-            args.shut || console.log('Prune file `' + at(file) + '`');
+            args.shut || log('Prune file', file);
             await rm(to, { force: true, recursive: true });
         }
     } else {
-        args.shut || console.log('Prune folder `' + at(to) + '`');
+        args.shut || log('Prune folder', to);
         await rm(to, { force: true, recursive: true });
     }
 }
@@ -268,7 +276,7 @@ if (others[0].length) {
         const file = join(to, other.out);
         await mkdir(dirname(file), { recursive: true });
         await copyFile(other.in, file);
-        args.shut || console.log('Copy file `' + at(file) + '`');
+        args.shut || log('Copy file', file);
     }
 }
 
@@ -280,7 +288,7 @@ if (plains[0].length) {
         state.file = { from: at(plain.in, '/'), to: at(file, '/') };
         state.folder = { from: at(dirname(plain.in), '/'), to: at(dirname(file), '/') };
         await writeFile(file, parse(s, state));
-        args.shut || console.log('Create file `' + at(file) + '`');
+        args.shut || log('Create file', file);
     }
 }
 
@@ -300,7 +308,7 @@ if (scripts[0].length) {
             state.file = { from: at(script.in, '/'), to: at(file, '/') };
             state.folder = { from: at(dirname(script.in), '/'), to: at(dirname(file), '/') };
             await writeFile(file, parse(s, state));
-            args.shut || console.log('Create file `' + at(file) + '`');
+            args.shut || log('Create file', file);
         }
     }
     await build({
@@ -347,7 +355,7 @@ if (styles[0].length) {
             state.file = { from: at(style.in, '/'), to: at(file, '/') };
             state.folder = { from: at(dirname(style.in), '/'), to: at(dirname(file), '/') };
             await writeFile(file, parse(s, state));
-            args.shut || console.log('Create file `' + at(file) + '`');
+            args.shut || log('Create file', file);
         }
         const file = join(to, style.out + '.css');
         await mkdir(dirname(file), { recursive: true });
@@ -362,7 +370,7 @@ if (styles[0].length) {
         await writeFile(file, parse(s, state));
         styles[0][k].in = file;
         styles[1][k].in = file;
-        args.shut || console.log('Create file `' + at(file) + '`');
+        args.shut || log('Create file', file);
     }
     await build({
         bundle: true,
@@ -403,7 +411,7 @@ if (templates[0].length) {
             state.file = { from: at(template.in, '/'), to: at(file, '/') };
             state.folder = { from: at(dirname(template.in), '/'), to: at(dirname(file), '/') };
             await writeFile(file, parse(s, state));
-            args.shut || console.log('Create file `' + at(file) + '`');
+            args.shut || log('Create file', file);
         }
         const file = join(to, template.out + '.html');
         await mkdir(dirname(file), { recursive: true });
@@ -422,11 +430,11 @@ if (templates[0].length) {
         // <https://github.com/prettier/prettier/issues/5641>
         s = s.replace(/ \/>/g, '>');
         await writeFile(file, parse(s, state));
-        args.shut || console.log('Create file `' + at(file) + '`');
+        args.shut || log('Create file', file);
         if (args.minify) {
             const file = join(to, template.out + '.min.html');
             await writeFile(file, parse(s1, state));
-            args.shut || console.log('Create file `' + at(file) + '`');
+            args.shut || log('Create file', file);
         }
     }
 }
