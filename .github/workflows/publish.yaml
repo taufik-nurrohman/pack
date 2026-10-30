@@ -19,7 +19,7 @@ jobs:
         shell: bash
         run: |
           set -e
-          for dir in node/*/; do
+          for dir in tools/*/; do
             [ -f "${dir}package.json" ] || continue
             echo "::group::${dir}"
             # Save root directory location so 'cd' returns reliably

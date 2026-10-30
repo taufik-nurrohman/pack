@@ -1,0 +1,19 @@
+{
+  "description": "Conditional utility.",
+  "exports": "./index.mjs",
+  "files": [
+    "index.mjs"
+  ],
+  "keywords": [
+    "helper",
+    "utility"
+  ],
+  "license": "MIT",
+  "name": "@taufik-nurrohman/is",
+  "repository": {
+    "directory": "tools/is",
+    "type": "git",
+    "url": "git+https://github.com/taufik-nurrohman/pack.git"
+  },
+  "version": "2.0.0"
+}

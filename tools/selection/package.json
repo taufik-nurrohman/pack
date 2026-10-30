@@ -1,0 +1,29 @@
+{
+  "dependencies": {
+    "@taufik-nurrohman/document": "*",
+    "@taufik-nurrohman/f": "*",
+    "@taufik-nurrohman/is": "*",
+    "@taufik-nurrohman/to": "*"
+  },
+  "description": "Selection utility.",
+  "exports": "./index.mjs",
+  "files": [
+    "index.mjs"
+  ],
+  "keywords": [
+    "helper",
+    "selection",
+    "utility"
+  ],
+  "license": "MIT",
+  "name": "@taufik-nurrohman/selection",
+  "repository": {
+    "directory": "tools/selection",
+    "type": "git",
+    "url": "git+https://github.com/taufik-nurrohman/pack.git"
+  },
+  "scripts": {
+    "test": "ava test.mjs"
+  },
+  "version": "3.0.0"
+}

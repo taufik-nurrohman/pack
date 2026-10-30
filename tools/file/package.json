@@ -1,0 +1,26 @@
+{
+  "description": "File system utility.",
+  "devDependencies": {
+    "ava": "^8.0.1"
+  },
+  "exports": "./index.mjs",
+  "files": [
+    "index.mjs"
+  ],
+  "keywords": [
+    "file",
+    "helper",
+    "utility"
+  ],
+  "license": "MIT",
+  "name": "@taufik-nurrohman/file",
+  "repository": {
+    "directory": "tools/file",
+    "type": "git",
+    "url": "git+https://github.com/taufik-nurrohman/pack.git"
+  },
+  "scripts": {
+    "test": "ava test.mjs"
+  },
+  "version": "2.0.0"
+}

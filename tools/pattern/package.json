@@ -1,0 +1,34 @@
+{
+  "dependencies": {
+    "@taufik-nurrohman/is": "*",
+    "@taufik-nurrohman/to": "*"
+  },
+  "description": "Regular expression utility.",
+  "devDependencies": {
+    "ava": "^4.3.0"
+  },
+  "exports": "./index.mjs",
+  "files": [
+    "index.mjs"
+  ],
+  "keywords": [
+    "expression",
+    "helper",
+    "pattern",
+    "regex",
+    "regexp",
+    "regular",
+    "utility"
+  ],
+  "license": "MIT",
+  "name": "@taufik-nurrohman/pattern",
+  "repository": {
+    "directory": "tools/pattern",
+    "type": "git",
+    "url": "git+https://github.com/taufik-nurrohman/pack.git"
+  },
+  "scripts": {
+    "test": "ava test.mjs"
+  },
+  "version": "2.0.0"
+}

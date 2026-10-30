@@ -1,0 +1,22 @@
+{
+  "dependencies": {
+    "@taufik-nurrohman/is": "*",
+    "@taufik-nurrohman/to": "*"
+  },
+  "description": "Utility functions that do not fit into a specific category.",
+  "exports": "./index.mjs",
+  "files": [
+    "index.mjs"
+  ],
+  "keywords": [
+    "utility"
+  ],
+  "license": "MIT",
+  "name": "@taufik-nurrohman/f",
+  "repository": {
+    "directory": "tools/f",
+    "type": "git",
+    "url": "git+https://github.com/taufik-nurrohman/pack.git"
+  },
+  "version": "2.0.0"
+}

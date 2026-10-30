@@ -1,0 +1,24 @@
+{
+  "dependencies": {
+    "@taufik-nurrohman/is": "*"
+  },
+  "description": "Utility of native event listener implementation.",
+  "exports": "./index.mjs",
+  "files": [
+    "index.mjs"
+  ],
+  "keywords": [
+    "event",
+    "helper",
+    "native",
+    "utility"
+  ],
+  "license": "MIT",
+  "name": "@taufik-nurrohman/event",
+  "repository": {
+    "directory": "tools/event",
+    "type": "git",
+    "url": "git+https://github.com/taufik-nurrohman/pack.git"
+  },
+  "version": "2.0.0"
+}

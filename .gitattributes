@@ -5,5 +5,5 @@
 .github export-ignore
 .gitignore export-ignore
 README.md export-ignore
-node/*/test export-ignore
-node/*/test.mjs export-ignore
+tools/*/test export-ignore
+tools/*/test.mjs export-ignore

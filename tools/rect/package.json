@@ -1,0 +1,30 @@
+{
+  "dependencies": {
+    "@taufik-nurrohman/document": "*"
+  },
+  "description": "Document, element, mouse and window position and dimension helpers.",
+  "exports": "./index.mjs",
+  "files": [
+    "index.mjs"
+  ],
+  "keywords": [
+    "dimension",
+    "helper",
+    "offset",
+    "position",
+    "rect",
+    "size",
+    "utility"
+  ],
+  "license": "MIT",
+  "name": "@taufik-nurrohman/rect",
+  "repository": {
+    "directory": "tools/rect",
+    "type": "git",
+    "url": "git+https://github.com/taufik-nurrohman/pack.git"
+  },
+  "scripts": {
+    "test": "ava test.mjs"
+  },
+  "version": "2.0.0"
+}

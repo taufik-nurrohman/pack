@@ -1,0 +1,32 @@
+{
+  "dependencies": {
+    "@taufik-nurrohman/document": "*",
+    "@taufik-nurrohman/is": "*"
+  },
+  "description": "Utility functions to do time-related tasks.",
+  "exports": "./index.mjs",
+  "files": [
+    "index.mjs"
+  ],
+  "keywords": [
+    "confine",
+    "debounce",
+    "delay",
+    "interval",
+    "repeat",
+    "restrict",
+    "stay",
+    "throttle",
+    "tick",
+    "time",
+    "utility"
+  ],
+  "license": "MIT",
+  "name": "@taufik-nurrohman/tick",
+  "repository": {
+    "directory": "tools/tick",
+    "type": "git",
+    "url": "git+https://github.com/taufik-nurrohman/pack.git"
+  },
+  "version": "3.0.0"
+}

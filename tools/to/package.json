@@ -1,0 +1,24 @@
+{
+  "dependencies": {
+    "@taufik-nurrohman/from": "*",
+    "@taufik-nurrohman/is": "*"
+  },
+  "description": "Convert to X from Y.",
+  "exports": "./index.mjs",
+  "files": [
+    "index.mjs"
+  ],
+  "keywords": [
+    "converter",
+    "helper",
+    "utility"
+  ],
+  "license": "MIT",
+  "name": "@taufik-nurrohman/to",
+  "repository": {
+    "directory": "tools/to",
+    "type": "git",
+    "url": "git+https://github.com/taufik-nurrohman/pack.git"
+  },
+  "version": "2.0.0"
+}
