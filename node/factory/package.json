@@ -3,49 +3,18 @@
     "pack": "./index.mjs"
   },
   "dependencies": {
-    "@babel/core": "^7.28.0",
-    "@babel/plugin-transform-class-properties": "^7.27.1",
-    "@babel/plugin-transform-private-methods": "^7.27.1",
-    "@babel/preset-env": "^7.28.0",
-    "@rollup/plugin-babel": "^6.0.4",
-    "@rollup/plugin-commonjs": "^28.0.6",
-    "@rollup/plugin-node-resolve": "^16.0.1",
-    "@taufik-nurrohman/file": "*",
-    "@taufik-nurrohman/folder": "*",
-    "clean-css": "^5.3.3",
-    "js-beautify": "^1.15.4",
-    "node-fetch": "^3.3.2",
-    "pug": "^3.0.3",
-    "rollup": "^4.44.2",
-    "sass": "^1.89.2",
-    "terser": "^5.43.1",
-    "yargs": "^18.0.0"
-  },
-  "description": "Simple Node.js script to generate CSS, HTML, and JavaScript files from ECMAScript, Pug, and SCSS files.",
-  "exports": "./index.mjs",
-  "files": [
-    "index.mjs"
-  ],
-  "keywords": [
-    "cli",
-    "css",
-    "html",
-    "js",
-    "mjs",
-    "pug",
-    "scss"
-  ],
-  "license": "MIT",
-  "name": "@taufik-nurrohman/factory",
-  "repository": {
-    "directory": "node/factory",
-    "type": "git",
-    "url": "git+https://github.com/taufik-nurrohman/packages.git"
+    "esbuild": "^0.28.2",
+    "prettier": "^3.9.10",
+    "pug": "^3.0.4",
+    "sass": "^1.106.1",
+    "yargs": "^18.2.0"
   },
   "scripts": {
-    "test": "node index.mjs --from=test --js-name=test --mjs --pug --scss --to=result",
-    "test-cjs": "node index.mjs --js-format=cjs --from=test --js-name=test --mjs --pug --scss --to=result",
-    "test-umd": "node index.mjs --js-format=umd --from=test --js-name=test --mjs --pug --scss --to=result"
+    "test": "node index.mjs --from=test/from --to=test/to",
+    "test-minify": "node index.mjs --from=test/from --minify --to=test/to",
+    "test-minify-with-modules": "node index.mjs --from=test/from --minify --mjs --pug --scss --to=test/to",
+    "test-with-modules": "node index.mjs --from=test/from --mjs --pug --scss --to=test/to",
+    "test-wrap": "node index.mjs --css-enter='%(css.license)' --from=test/from --html-enter='%(html.license)' --js-enter='%(js.license)' --mjs-enter='%(mjs.license)' --pug-enter='%(pug.license)' --scss-enter='%(scss.license)' --to=test/to"
   },
-  "version": "3.0.0"
+  "type": "module"
 }

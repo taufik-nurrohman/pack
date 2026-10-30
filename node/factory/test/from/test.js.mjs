@@ -4,14 +4,10 @@ import suffix from './_part/test.mjs';
 import parent from '../test.mjs';
 
 // Test inline
-/// FETCH("../test.js.txt");
-/// FETCH('../test.js.txt');
-/// FETCH(`../test.js.txt`);
+import '../test.js';
 
 // Test inline
-/// FETCH("https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js");
-/// FETCH('https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js');
-/// FETCH(`https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js`);
+import 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js';
 
 /// IIFE(
 window.jQuery.fn.foo = 'bar';
