@@ -136,14 +136,8 @@ const writePlugin = minify => ({
                 if (!minify) {
                     s = await format(file.text, {
                         parser,
-                        plugins: ['@prettier/plugin-pug', '@prettier/plugin-xml'],
-                        printWidth: printWidthNarrow.includes(x) ? 120 : 1000000,
-                        pugAttibuteSeparator: 'none',
-                        pugSortAttributes: 'asc',
                         tabWidth: tabWidthNarrow.includes(x) ? 2 : 4,
-                        useTabs: false,
-                        xmlQuoteAttributes: 'double',
-                        xmlSortAttributesByKey: true
+                        useTabs: false
                     });
                 }
                 if (args.license && state.licenseComment[x]) {
@@ -192,16 +186,11 @@ const to = resolve(join(cwd, args.to));
 const parserMap = {
     cjs: 'babel',
     js: 'babel',
-    md: 'markdown',
     mjs: 'babel',
-    mkd: 'markdown',
-    svg: 'xml',
-    ts: 'babel-ts',
-    yml: 'yaml'
+    ts: 'babel-ts'
 };
 
-const printWidthNarrow = ['md', 'mkd', 'markdown'];
-const tabWidthNarrow = ['css', 'html', 'json', 'pug', 'scss', 'svg', 'xml'];
+const tabWidthNarrow = ['css', 'pug', 'scss'];
 
 let license, state = JSON.parse(await readFile(join(cwd, 'package.json'), 'utf8').catch(e => ""));
 
@@ -210,15 +199,16 @@ state.year = (new Date).getFullYear();
 
 if (args.license) {
     license = await readFile(join(from, 'LICENSE'), 'utf8').catch(e => "") || await readFile(join(from, 'LICENSE.txt'), 'utf8').catch(e => "");
-    if ("" !== license.trim()) {
+    license = license.trim();
+    if ("" !== license) {
         license = parse(license, state);
         let short = !license.includes('\n');
         state.licenseComment.css = (short ? '/*! ' + license + ' */' : '/*!\n *\n' + license.replace(/^.*$/gm, m => "" === m.trim() ? ' *' : ' * ' + m) + '\n *\n */') + '\n\n';
         state.licenseComment.html = (short ? '<!-- ' + license + ' -->' : '<!--\n\n' + license + '\n\n-->') + '\n';
         state.licenseComment.js = (short ? '//' + license : license.replace(/^.*$/gm, m => "" === m.trim() ? '//' : '// ' + m)) + '\n\n';
         state.licenseComment.mjs = (short ? '/*! ' + license + ' */' : '/*!\n *\n' + license.replace(/^.*$/gm, m => "" === m.trim() ? ' *' : ' * ' + m) + '\n *\n */') + '\n\n';
-        state.licenseComment.pug = (short ? '//- ' + license : license.replace(/^.*$/gm, m => "" === m.trim() ? '//-' : '//- ' + m)) + '\n';
-        state.licenseComment.scss = (short ? '/*! ' + license + ' */' : '/*!\n *\n' + license.replace(/^.*$/gm, m => "" === m.trim() ? ' *' : ' * ' + m) + '\n *\n */') + '\n\n';
+        state.licenseComment.pug = (short ? '//- ' + license : license.replace(/^.*$/gm, m => "" === m.trim() ? '//-' : '//- ' + m)) + '\n\n';
+        state.licenseComment.scss = (short ? '//' + license : license.replace(/^.*$/gm, m => "" === m.trim() ? '//' : '// ' + m)) + '\n\n';
     }
 }
 

@@ -4,8 +4,6 @@
     "factory": "./index.mjs"
   },
   "dependencies": {
-    "@prettier/plugin-pug": "^3.6.0",
-    "@prettier/plugin-xml": "^3.4.2",
     "esbuild": "^0.28.2",
     "prettier": "^3.9.10",
     "pug": "^3.0.4",
@@ -37,7 +35,6 @@
     "test-minify": "node index.mjs --from=test/from --minify --to=test/to",
     "test-minify-all": "node index.mjs --from=test/from --minify=true --to=test/to",
     "test-minify-any": "node index.mjs --from=test/from --minify=js --to=test/to",
-    "test-minify-license": "node index.mjs --from=test/from --license --to=test/to",
     "test-minify-module": "node index.mjs --from=test/from --minify --module --to=test/to",
     "test-minify-not": "node index.mjs --from=test/from --minify=false --to=test/to",
     "test-module": "node index.mjs --from=test/from --module --to=test/to",
