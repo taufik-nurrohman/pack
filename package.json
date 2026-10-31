@@ -1,9 +1,9 @@
 {
-  "author": "Taufik Nurrohman",
-  "bugs": "https://github.com/taufik-nurrohman/pack/issues",
+  "bugs": {
+    "url": "https://github.com/taufik-nurrohman/pack/issues"
+  },
   "description": "Pack.",
   "homepage": "https://taufik-nurrohman.js.org/pack",
-  "license": "MIT",
   "name": "@taufik-nurrohman/pack",
   "publishConfig": {
     "access": "public"
@@ -12,6 +12,9 @@
     "type": "git",
     "url": "git+https://github.com/taufik-nurrohman/pack.git"
   },
+  "author": "Taufik Nurrohman",
+  "license": "MIT",
+  "type": "module",
   "version": "0.0.1",
   "workspaces": [
     "tools/*"
