@@ -35,4 +35,13 @@ a {
 @import '../test.css';
 
 /* Test inline */
-@import 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css';
+@import 'https://taufik-nurrohman.js.org/tag-picker/index.css';
+
+#test-quote::before {
+  background-image: url('asdf.png');
+  content: url("asdf.png");
+}
+
+[test="quote 1"] { margin: 0px; }
+
+[test='quote 2'] { margin: 0px; }

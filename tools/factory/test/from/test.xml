@@ -1,0 +1,11 @@
+<page type="Markdown">
+  <title>Page Title</title>
+  <description>Page description.</description>
+  <content>
+    <![CDATA[
+
+      This is a **bold** text.
+
+    ]]>
+  </content>
+</page>

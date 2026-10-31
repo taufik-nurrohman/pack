@@ -1,0 +1,13 @@
+html
+  head
+    meta(charset='utf-8')
+    title Test
+    link(href='test.css' rel='stylesheet')
+  body
+    | <?php if (!empty($title)): ?>
+    h1 <?= $title; ?>
+    | <?php endif; ?>
+    | <?php if (!empty($content)): ?>
+    p <?= $content; ?>
+    | <?php endif; ?>
+    script(src='test.js')

@@ -1,15 +1,29 @@
 {
+  "author": "Taufik Nurrohman",
   "bin": {
-    "factory": "./index.mjs",
-    "pack": "./index.mjs"
+    "factory": "./index.mjs"
   },
   "dependencies": {
+    "@prettier/plugin-pug": "^3.6.0",
+    "@prettier/plugin-xml": "^3.4.2",
     "esbuild": "^0.28.2",
     "prettier": "^3.9.10",
     "pug": "^3.0.4",
     "sass": "^1.106.1",
     "yargs": "^18.2.0"
   },
+  "description": "Simple NodeJS script to generate CSS, HTML, and JavaScript files from ECMAScript, Pug, and SCSS files.",
+  "files": [
+    "index.mjs"
+  ],
+  "homepage": "https://taufik-nurrohman.js.org",
+  "keywords": [
+    "build",
+    "cli",
+    "format",
+    "minify",
+    "tidy"
+  ],
   "license": "MIT",
   "name": "@taufik-nurrohman/factory",
   "repository": {
@@ -19,11 +33,18 @@
   },
   "scripts": {
     "test": "node index.mjs --from=test/from --to=test/to",
+    "test-license": "node index.mjs --from=test/from --license --minify=true --module=true --to=test/to",
     "test-minify": "node index.mjs --from=test/from --minify --to=test/to",
-    "test-minify-all": "node index.mjs --from=test/from --minify=css,html,js --to=test/to",
-    "test-minify-with-modules": "node index.mjs --from=test/from --minify --mjs --pug --scss --to=test/to",
-    "test-with-modules": "node index.mjs --from=test/from --mjs --pug --scss --to=test/to",
-    "test-wrap": "node index.mjs --css-enter='%(css.license)' --from=test/from --html-enter='%(html.license)' --js-enter='%(js.license)' --mjs-enter='%(mjs.license)' --pug-enter='%(pug.license)' --scss-enter='%(scss.license)' --to=test/to"
+    "test-minify-all": "node index.mjs --from=test/from --minify=true --to=test/to",
+    "test-minify-any": "node index.mjs --from=test/from --minify=js --to=test/to",
+    "test-minify-license": "node index.mjs --from=test/from --license --to=test/to",
+    "test-minify-module": "node index.mjs --from=test/from --minify --module --to=test/to",
+    "test-minify-not": "node index.mjs --from=test/from --minify=false --to=test/to",
+    "test-module": "node index.mjs --from=test/from --module --to=test/to",
+    "test-module-all": "node index.mjs --from=test/from --module=true --to=test/to",
+    "test-module-any": "node index.mjs --from=test/from --module=mjs --to=test/to",
+    "test-module-not": "node index.mjs --from=test/from --module=false --to=test/to"
   },
-  "type": "module"
+  "type": "module",
+  "version": "2.3.1"
 }

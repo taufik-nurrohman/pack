@@ -1,9 +1,9 @@
 Factory
 =======
 
-Simple Node.js script to generate CSS, HTML, and JavaScript files from ECMAScript, Pug, and SCSS files.
+Simple NodeJS script to generate CSS, HTML, and JavaScript files from ECMAScript, Pug, and SCSS files.
 
-_Paket, paket Node.js apa yang digemari para suami? Namanya [@taufik-nurrohman/factory](https://www.npmjs.com/package/@taufik-nurrohman/factory). Karena cara pakainya `npm run pack`. Xixixi lucu yah pack_ 😁
+_Paket, paket NodeJS apa yang digemari para suami? Namanya [@taufik-nurrohman/factory](https://www.npmjs.com/package/@taufik-nurrohman/factory). Karena cara pakainya `npm run pack`. Xixixi lucu yah pack_ 😁
 
 Usage
 -----
@@ -14,19 +14,19 @@ mkdir my-project/src
 mkdir my-project/dist
 ~~~
 
-Paste your `*.scss`, `*.mjs`, and `*.pug` files to `.\my-project\src` folder.
+Paste your `*.mjs`, `*.pug`, and `*.scss` files to `.\my-project\src` folder, then:
 
 ~~~ sh
 cd my-project
 npm install @taufik-nurrohman/factory --save-dev
 ~~~
 
-Create a `scripts` field that runs the `pack` command in `.\my-project\package.json`
+Create a `scripts` field that runs the `factory` command in `.\my-project\package.json`:
 
 ~~~ json
 {
   "scripts": {
-    "pack": "pack --from=src --to=dist"
+    "pack": "factory --from=src --to=dist"
   }
 }
 ~~~
@@ -61,24 +61,12 @@ Options
 
 Key | Description
 --- | -----------
-`--css-enter` | Insert string at the top of the CSS file (default to `""`).
-`--css-exit` | Insert string at the bottom of the CSS file (default to `""`).
-`--from` | Folder path to store the files to be compiled (default to `"src"`).
-`--html-enter` | Insert string at the top of the HTML file (default to `""`).
-`--html-exit` | Insert string at the bottom of the HTML file (default to `""`).
-`--js-enter` | Insert string at the top of the JS file (default to `""`).
-`--js-exit` | Insert string at the bottom of the JS file (default to `""`).
-`--js-export` | JavaScript [module name](https://rollupjs.org/guide/en/#quick-start) (default to `""`).
-`--mjs-enter` | Insert string at the top of the MJS file (default to `""`).
-`--mjs-exit` | Insert string at the bottom of the MJS file (default to `""`).
-`--mjs` | Include MJS files to the output.
-`--prune` | Clean-up the old compiled files before re-compile (default to `true`).
-`--pug-enter` | Insert string at the top of the PUG file (default to `""`).
-`--pug-exit` | Insert string at the bottom of the PUG file (default to `""`).
-`--pug` | Include PUG files to the output.
-`--scss-enter` | Insert string at the top of the SCSS file (default to `""`).
-`--scss-exit` | Insert string at the bottom of the SCSS file (default to `""`).
-`--scss` | Include SCSS files to the output.
+`--export` | JavaScript [module name](https://esbuild.github.io/api#global-name) (default to `""`).
+`--from` | Folder to store the source files (default to `""`).
+`--license` | Insert license comment at the top of the file (default to `false`).
+`--minify` | Include the minified files to the result folder as well (default to `false`).
+`--module` | Include module files to the result folder as well (default to `false`).
+`--prune` | Prune result folder before re-build (default to `true`).
 `--shut` | Disable logging (default to `false`).
-`--to` | Folder path to store the compiled files (default to `"dist"`).
+`--to` | Folder to store the distributable files (default to `""`).
 `--version` | Show version information.

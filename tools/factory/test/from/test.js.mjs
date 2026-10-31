@@ -7,7 +7,7 @@ import parent from '../test.mjs';
 import '../test.js';
 
 // Test inline
-import 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js';
+import 'https://taufik-nurrohman.js.org/tag-picker/index.js';
 
 /// IIFE(
 window.jQuery.fn.foo = 'bar';

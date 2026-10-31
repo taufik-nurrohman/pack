@@ -5,6 +5,7 @@ import pug from 'pug';
 import yargs from 'yargs';
 import { build } from 'esbuild';
 import { format } from 'prettier';
+import { hideBin } from 'yargs/helpers';
 
 import {
     copyFile,
@@ -22,33 +23,39 @@ import {
     resolve
 } from 'node:path';
 
-const args = yargs(process.argv.slice(2))
-    .options({
-        'css-enter': { default: "", describe: 'Insert string at the top of the CSS file', type: 'string' },
-        'css-exit': { default: "", describe: 'Insert string at the bottom of the CSS file', type: 'string' },
-        'from': { default: 'src', describe: 'Folder to store the source files', type: 'string' },
-        'html-enter': { default: "", describe: 'Insert string at the top of the HTML file', type: 'string' },
-        'html-exit': { default: "", describe: 'Insert string at the bottom of the HTML file', type: 'string' },
-        'js-enter': { default: "", describe: 'Insert string at the top of the JS file', type: 'string' },
-        'js-exit': { default: "", describe: 'Insert string at the bottom of the JS file', type: 'string' },
-        'js-export': { default: "", describe: 'JavaScript module name', type: 'string' },
-        'minify': { default: false, describe: 'Include minified files to the output as well', type: 'boolean' },
-        'mjs': { default: false, describe: 'Include MJS files to the output as well', type: 'boolean' },
-        'mjs-enter': { default: "", describe: 'Insert string at the top of the MJS file', type: 'string' },
-        'mjs-exit': { default: "", describe: 'Insert string at the bottom of the MJS file', type: 'string' },
-        'prune': { default: true, describe: 'Clean-up dist folder before re-compile', type: 'boolean' },
-        'pug': { default: false, describe: 'Include Pug files to the output as well', type: 'boolean' },
-        'pug-enter': { default: "", describe: 'Insert string at the top of the PUG file', type: 'string' },
-        'pug-exit': { default: "", describe: 'Insert string at the bottom of the PUG file', type: 'string' },
-        'scss': { default: false, describe: 'Include SCSS files to the output as well', type: 'boolean' },
-        'scss-enter': { default: "", describe: 'Insert string at the top of the SCSS file', type: 'string' },
-        'scss-exit': { default: "", describe: 'Insert string at the bottom of the SCSS file', type: 'string' },
-        'shut': { default: false, describe: 'Disable logging', type: 'boolean' },
-        'to': { default: 'dist', describe: 'Folder to store the distributable files', type: 'string' }
-    })
-    .command('--from=src --to=dist')
-    .help()
-    .argv;
+const args = yargs(hideBin(process.argv)).options({
+    'export': { alias: 'e', default: "", describe: 'JavaScript module name.', type: 'string' },
+    'from': { default: "", demandOption: true, describe: 'Folder to store the source files.', type: 'string' },
+    'license': { alias: 'l', default: false, describe: 'Insert license comment at the top of the file.', type: 'boolean' },
+    'minify': { alias: 'z', describe: 'Include the minified files to the result folder as well.', string: true, type: 'array' },
+    'module': { alias: 'm', describe: 'Include module files to the result folder as well.', string: true, type: 'array' },
+    'prune': { alias: 'p', default: true, describe: 'Prune result folder before re-build.', type: 'boolean' },
+    'shut': { alias: 'x', default: false, describe: 'Disable logging.', type: 'boolean' },
+    'to': { default: "", demandOption: true, describe: 'Folder to store the distributable files.', type: 'string' }
+}).help().middleware(argv => {
+    if (!argv.minify) {
+        argv.minify = false;
+    } else if (0 === argv.minify.length) {
+        argv.minify = ['css', 'js'];
+    } else if (1 === argv.minify.length && 'false' === argv.minify[0]) {
+        argv.minify = false;
+    } else if (1 === argv.minify.length && 'null' === argv.minify[0]) {
+        argv.minify = null;
+    } else if (1 === argv.minify.length && 'true' === argv.minify[0]) {
+        argv.minify = ['css', 'html', 'js'];
+    }
+    if (!argv.module) {
+        argv.module = false;
+    } else if (0 === argv.module.length) {
+        argv.module = ['mjs', 'scss'];
+    } else if (1 === argv.module.length && 'false' === argv.module[0]) {
+        argv.module = false;
+    } else if (1 === argv.module.length && 'null' === argv.module[0]) {
+        argv.module = null;
+    } else if (1 === argv.module.length && 'true' === argv.module[0]) {
+        argv.module = ['mjs', 'pug', 'scss'];
+    }
+}).argv;
 
 const at = (path, join = '\\') => {
     let d = cwd.replace(/[\\\/]/g, join) + join;
@@ -64,14 +71,26 @@ const cwd = process.cwd();
 const importPlugin = {
     name: 'import',
     setup(build) {
-        build.onResolve({ filter: /^[.]{1,2}[\\\/]/ }, a => ({
-            namespace: 'file',
-            path: resolve(dirname(a.importer), a.path)
-        }));
-        build.onResolve({ filter: /^https?:[\\\/]{2}/ }, a => ({
-            namespace: 'link',
-            path: a.path
-        }));
+        build.onResolve({ filter: /.*/ }, a => {
+            if (a.kind === 'url-token') {
+                return {
+                    path: a.path,
+                    external: true
+                };
+            }
+        });
+        build.onResolve({ filter: /^[.]{1,2}[\\\/]/ }, a => {
+            return {
+                namespace: 'file',
+                path: resolve(dirname(a.importer), a.path)
+            };
+        });
+        build.onResolve({ filter: /^https?:[\\\/]{2}/ }, a => {
+            return {
+                namespace: 'link',
+                path: a.path
+            };
+        });
         build.onLoad({ filter: /.*/, namespace: 'file' }, async a => {
             return {
                 contents: await readFile(a.path, 'utf8'),
@@ -111,23 +130,24 @@ const writePlugin = minify => ({
                 return;
             }
             for (const file of result.outputFiles ?? []) {
+                const x = file.path.split('.').pop();
+                const parser = parserMap[x] || x;
                 let s = file.text;
                 if (!minify) {
-                    const x = file.path.split('.').pop();
-                    const parser = {
-                        cjs: 'babel',
-                        js: 'babel',
-                        md: 'markdown',
-                        mjs: 'babel',
-                        mkd: 'markdown',
-                        ts: 'babel-ts',
-                        yml: 'yaml',
-                    }[x] || x;
                     s = await format(file.text, {
                         parser,
-                        tabWidth: ['css', 'html', 'pug', 'scss', 'svg', 'xml'].includes(x) ? 2 : 4,
-                        useTabs: false
+                        plugins: ['@prettier/plugin-pug', '@prettier/plugin-xml'],
+                        printWidth: printWidthNarrow.includes(x) ? 120 : 1000000,
+                        pugAttibuteSeparator: 'none',
+                        pugSortAttributes: 'asc',
+                        tabWidth: tabWidthNarrow.includes(x) ? 2 : 4,
+                        useTabs: false,
+                        xmlQuoteAttributes: 'double',
+                        xmlSortAttributesByKey: true
                     });
+                }
+                if (args.license && state.licenseComment[x]) {
+                    s = (minify ? state.licenseComment[x].trim() + (state.licenseComment[x].startsWith('//') ? '\n' : "") : state.licenseComment[x]) + s;
                 }
                 state.file = { to: at(file.path, '/') };
                 state.folder = { to: at(dirname(file.path), '/') };
@@ -169,18 +189,38 @@ const parse = (s, state, pattern = '%\\((\\S+?)\\)', split = '.') => {
 const from = resolve(join(cwd, args.from));
 const to = resolve(join(cwd, args.to));
 
-let license = await readFile(join(from, 'LICENSE'), 'utf8').catch(e => "") || await readFile(join(from, 'LICENSE.txt'), 'utf8').catch(e => "");
-let state = JSON.parse(await readFile(join(cwd, 'package.json'), 'utf8').catch(e => ""));
+const parserMap = {
+    cjs: 'babel',
+    js: 'babel',
+    md: 'markdown',
+    mjs: 'babel',
+    mkd: 'markdown',
+    svg: 'xml',
+    ts: 'babel-ts',
+    yml: 'yaml'
+};
 
+const printWidthNarrow = ['md', 'mkd', 'markdown'];
+const tabWidthNarrow = ['css', 'html', 'json', 'pug', 'scss', 'svg', 'xml'];
+
+let license, state = JSON.parse(await readFile(join(cwd, 'package.json'), 'utf8').catch(e => ""));
+
+state.licenseComment = {};
 state.year = (new Date).getFullYear();
 
-license = parse(license, state);
-
-state.css = { license: '/*!\n *\n' + license.replace(/^.*$/gm, m => "" === m.trim() ? ' *' : ' * ' + m) + '\n *\n */' };
-state.html = { license: '<!--\n\n' + license + '\n\n-->' };
-state.js = { license: license.replace(/^.*$/gm, m => "" === m.trim() ? '//' : '// ' + m) };
-state.mjs = { license: '/*!\n *\n' + license.replace(/^.*$/gm, m => "" === m.trim() ? ' *' : ' * ' + m) + '\n *\n */' };
-state.pug = { license: license.replace(/^.*$/gm, m => "" === m.trim() ? '//-' : '//- ' + m) };
+if (args.license) {
+    license = await readFile(join(from, 'LICENSE'), 'utf8').catch(e => "") || await readFile(join(from, 'LICENSE.txt'), 'utf8').catch(e => "");
+    if ("" !== license.trim()) {
+        license = parse(license, state);
+        let short = !license.includes('\n');
+        state.licenseComment.css = (short ? '/*! ' + license + ' */' : '/*!\n *\n' + license.replace(/^.*$/gm, m => "" === m.trim() ? ' *' : ' * ' + m) + '\n *\n */') + '\n\n';
+        state.licenseComment.html = (short ? '<!-- ' + license + ' -->' : '<!--\n\n' + license + '\n\n-->') + '\n';
+        state.licenseComment.js = (short ? '//' + license : license.replace(/^.*$/gm, m => "" === m.trim() ? '//' : '// ' + m)) + '\n\n';
+        state.licenseComment.mjs = (short ? '/*! ' + license + ' */' : '/*!\n *\n' + license.replace(/^.*$/gm, m => "" === m.trim() ? ' *' : ' * ' + m) + '\n *\n */') + '\n\n';
+        state.licenseComment.pug = (short ? '//- ' + license : license.replace(/^.*$/gm, m => "" === m.trim() ? '//-' : '//- ' + m)) + '\n';
+        state.licenseComment.scss = (short ? '/*! ' + license + ' */' : '/*!\n *\n' + license.replace(/^.*$/gm, m => "" === m.trim() ? ' *' : ' * ' + m) + '\n *\n */') + '\n\n';
+    }
+}
 
 delete state.scripts;
 
@@ -241,6 +281,12 @@ if (args.prune) {
 
 await mkdir(to, { recursive: true });
 
+const asMinify = path => {
+    let any = path.split('.'),
+        x = any.pop();
+    return any.join('.') + '.min.' + x;
+};
+
 const files = await scan(from);
 
 const others = [[], []];
@@ -252,18 +298,18 @@ const templates = [[], []];
 
 for (const file of files) {
     let fileName;
-    if (file.endsWith('.css.scss')) {
-        fileName = relative(from, file).slice(0, -9);
-        styles[0].push({ in: file, out: fileName });
-        styles[1].push({ in: file, out: fileName + '.min' });
-    } else if (file.endsWith('.html.pug')) {
-        fileName = relative(from, file).slice(0, -9);
-        templates[0].push({ in: file, out: fileName });
-        templates[1].push({ in: file, out: fileName + '.min' });
-    } else if (file.endsWith('.js.mjs')) {
-        fileName = relative(from, file).slice(0, -7);
+    if (file.endsWith('.mjs')) {
+        fileName = relative(from, file).slice(0, -4);
         scripts[0].push({ in: file, out: fileName });
-        scripts[1].push({ in: file, out: fileName + '.min' });
+        scripts[1].push({ in: file, out: asMinify(fileName) });
+    } else if (file.endsWith('.pug')) {
+        fileName = relative(from, file).slice(0, -4);
+        templates[0].push({ in: file, out: fileName });
+        templates[1].push({ in: file, out: asMinify(fileName) });
+    } else if (file.endsWith('.scss')) {
+        fileName = relative(from, file).slice(0, -5);
+        styles[0].push({ in: file, out: fileName });
+        styles[1].push({ in: file, out: asMinify(fileName) });
     } else if (file.endsWith('.txt')) {
         plains[0].push({ in: file, out: relative(from, file).slice(0, -4) });
     } else {
@@ -294,12 +340,11 @@ if (plains[0].length) {
 
 if (scripts[0].length) {
     for (const script of scripts[0]) {
-        if (args.mjs) {
-            const file = join(to, script.out + '.mjs');
+        if (args.module && args.module.includes('mjs')) {
+            const file = join(to, script.out.slice(0, -2) + 'mjs');
             await mkdir(dirname(file), { recursive: true });
             let s = await readFile(script.in, 'utf8');
-            args.mjsEnter && (s = args.mjsEnter + s);
-            args.mjsExit && (s += args.mjsExit);
+            args.license && (s = state.licenseComment.mjs + s);
             s = await format(s, {
                 parser: 'babel',
                 tabWidth: 4,
@@ -313,9 +358,9 @@ if (scripts[0].length) {
     }
     await build({
         bundle: true,
-        entryPoints: scripts[0],
+        entryPoints: scripts[0].map(a => ({ in: a.in, out: a.out.slice(0, -3) })),
         format: 'iife',
-        globalName: args.jsExport,
+        globalName: args.export,
         logLevel: 'silent',
         metafile: true,
         minify: false,
@@ -325,12 +370,12 @@ if (scripts[0].length) {
         target: 'es2022',
         write: false
     });
-    if (args.minify) {
+    if (args.minify && args.minify.includes('js')) {
         await build({
             bundle: true,
-            entryPoints: scripts[1],
+            entryPoints: scripts[1].map(a => ({ in: a.in, out: a.out.slice(0, -3) })),
             format: 'iife',
-            globalName: args.jsExport,
+            globalName: args.export,
             logLevel: 'silent',
             metafile: true,
             minify: true,
@@ -346,25 +391,28 @@ if (scripts[0].length) {
 if (styles[0].length) {
     for (const k in styles[0]) {
         const style = styles[0][k];
-        if (args.scss) {
-            const file = join(to, style.out + '.scss');
+        if (args.module && args.module.includes('scss')) {
+            const file = join(to, style.out.slice(0, -3) + 'scss');
             await mkdir(dirname(file), { recursive: true });
             let s = await readFile(style.in, 'utf8');
-            args.scssEnter && (s = args.scssEnter + s);
-            args.scssExit && (s += args.scssExit);
+            args.license && (s = state.licenseComment.scss + s);
             state.file = { from: at(style.in, '/'), to: at(file, '/') };
             state.folder = { from: at(dirname(style.in), '/'), to: at(dirname(file), '/') };
             await writeFile(file, parse(s, state));
             args.shut || log('Create file', file);
         }
-        const file = join(to, style.out + '.css');
+        const file = join(to, style.out);
         await mkdir(dirname(file), { recursive: true });
         let s = sass.compile(style.in, {
             charset: false,
             silenceDeprecations: ['import']
         }).css;
-        args.cssEnter && (s = args.cssEnter + s);
-        args.cssExit && (s += args.cssExit);
+        args.license && (s = state.licenseComment.css + s);
+        s = await format(s, {
+            parser: 'css',
+            tabWidth: 2,
+            useTabs: false
+        });
         state.file = { from: at(style.in, '/'), to: at(file, '/') };
         state.folder = { from: at(dirname(style.in), '/'), to: at(dirname(file), '/') };
         await writeFile(file, parse(s, state));
@@ -374,7 +422,7 @@ if (styles[0].length) {
     }
     await build({
         bundle: true,
-        entryPoints: styles[0],
+        entryPoints: styles[0].map(a => ({ in: a.in, out: a.out.slice(0, -4) })),
         logLevel: 'silent',
         metafile: true,
         minify: false,
@@ -384,10 +432,10 @@ if (styles[0].length) {
         target: 'es2022',
         write: false
     });
-    if (args.minify) {
+    if (args.minify && args.minify.includes('css')) {
         await build({
             bundle: true,
-            entryPoints: styles[1],
+            entryPoints: styles[1].map(a => ({ in: a.in, out: a.out.slice(0, -4) })),
             logLevel: 'silent',
             metafile: true,
             minify: true,
@@ -402,25 +450,24 @@ if (styles[0].length) {
 if (templates[0].length) {
     for (const k in templates[0]) {
         const template = templates[0][k];
-        if (args.pug) {
-            const file = join(to, template.out + '.pug');
+        if (args.module && args.module.includes('pug')) {
+            const file = join(to, template.out.replace(/\.(p?html|php\d*)$/, "") + '.pug');
             await mkdir(dirname(file), { recursive: true });
             let s = await readFile(template.in, 'utf8');
-            args.pugEnter && (s = args.pugEnter + s);
-            args.pugExit && (s += args.pugExit);
+            args.license && (s = state.licenseComment.pug + s);
             state.file = { from: at(template.in, '/'), to: at(file, '/') };
             state.folder = { from: at(dirname(template.in), '/'), to: at(dirname(file), '/') };
             await writeFile(file, parse(s, state));
             args.shut || log('Create file', file);
         }
-        const file = join(to, template.out + '.html');
+        const file = join(to, template.out);
         await mkdir(dirname(file), { recursive: true });
         let s = pug.renderFile(template.in, {
             doctype: 'html',
             ...state
         }), s1 = s; // Result is minified by default
-        args.htmlEnter && (s = args.htmlEnter + s);
-        args.htmlExit && (s += args.htmlExit);
+        args.license && (s = state.licenseComment.html + s);
+        args.license && (s1 = state.licenseComment.html.trim() + s1);
         state.file = { from: at(template.in, '/'), to: at(file, '/') };
         state.folder = { from: at(dirname(template.in), '/'), to: at(dirname(file), '/') };
         s = await format(s, {
@@ -431,8 +478,8 @@ if (templates[0].length) {
         s = s.replace(/ \/>/g, '>');
         await writeFile(file, parse(s, state));
         args.shut || log('Create file', file);
-        if (args.minify) {
-            const file = join(to, template.out + '.min.html');
+        if (args.minify && args.minify.includes('html')) {
+            const file = join(to, asMinify(template.out));
             await writeFile(file, parse(s1, state));
             args.shut || log('Create file', file);
         }
