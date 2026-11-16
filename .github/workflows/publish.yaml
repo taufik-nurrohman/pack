@@ -17,8 +17,6 @@ jobs:
       - run: npm install
       - name: Publish Packages
         shell: bash
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           set -e
           for dir in tools/*/; do
