@@ -1,7 +1,7 @@
 name: Publish
 on:
   release:
-    types: [published]
+    types: [ published ]
 permissions:
   contents: read
   id-token: write
@@ -12,9 +12,11 @@ jobs:
       - uses: actions/checkout@v6
       - uses: actions/setup-node@v6
         with:
-          node-version: 22
+          node-version: 24
+          package-manager-cache: false
           registry-url: https://registry.npmjs.org
-      - run: npm install
+      - run: npm ci
+      - run: npm publish --access public
       - name: Publish Packages
         shell: bash
         run: |
@@ -31,7 +33,7 @@ jobs:
               echo "Already published: $NAME@$VERSION"
             else
               echo "Publishing $NAME@$VERSION"
-              npm publish --provenance --access public
+              npm publish --access public
             fi
             cd "$ROOT_DIR"
             echo "::endgroup::"
