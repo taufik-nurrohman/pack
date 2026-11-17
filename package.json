@@ -2,7 +2,27 @@
   "bugs": {
     "url": "https://github.com/taufik-nurrohman/pack/issues"
   },
-  "description": "Pack.",
+  "dependencies": {
+    "@taufik-nurrohman/document": "*",
+    "@taufik-nurrohman/event": "*",
+    "@taufik-nurrohman/f": "*",
+    "@taufik-nurrohman/factory": "*",
+    "@taufik-nurrohman/from": "*",
+    "@taufik-nurrohman/has": "*",
+    "@taufik-nurrohman/hook": "*",
+    "@taufik-nurrohman/is": "*",
+    "@taufik-nurrohman/pattern": "*",
+    "@taufik-nurrohman/quote": "*",
+    "@taufik-nurrohman/rect": "*",
+    "@taufik-nurrohman/selection": "*",
+    "@taufik-nurrohman/tick": "*",
+    "@taufik-nurrohman/to": "*"
+  },
+  "description": "Project factory.",
+  "exports": "./index.mjs",
+  "files": [
+    "index.mjs"
+  ],
   "homepage": "https://taufik-nurrohman.js.org/pack",
   "name": "@taufik-nurrohman/pack",
   "repository": {
@@ -12,8 +32,8 @@
   "author": "Taufik Nurrohman",
   "license": "MIT",
   "type": "module",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "workspaces": [
-    "tools/*"
+    "dependencies/*"
   ]
 }
