@@ -1,4 +1,5 @@
 import f, {
+    forEach,
     forEachArray,
     forEachMap,
     forEachObject,
@@ -10,6 +11,7 @@ import f, {
     letReference,
     letValueInMap,
     onAnimationsEnd,
+    php,
     setObjectAttributes,
     setObjectMethods,
     setPrototype,
@@ -39,6 +41,7 @@ export { default as to } from '@taufik-nurrohman/to';
 export {
     f as default,
     f,
+    forEach,
     forEachArray,
     forEachMap,
     forEachObject,
@@ -50,6 +53,7 @@ export {
     letReference,
     letValueInMap,
     onAnimationsEnd,
+    php,
     setObjectAttributes,
     setObjectMethods,
     setPrototype,
