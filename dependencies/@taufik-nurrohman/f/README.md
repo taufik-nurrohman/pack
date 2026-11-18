@@ -17,6 +17,10 @@ forEachArray([1, 2, 3], function (value, key) {
 Methods
 -------
 
+### forEach(object, at)
+
+This is an alias of `forEachObject(object, at)`.
+
 ### forEachArray(array, at)
 
 ~~~ js
@@ -85,13 +89,13 @@ function Editor(self, state) {
 }
 
 setObjectAttributes(Editor, {
-    'name': {
+    name: {
         value: 'Editor'
     }
 }, true);
 
 setObjectAttributes(Editor, {
-    'value': {
+    value: {
         get: function () {
             return this.self.value;
         },
@@ -112,11 +116,11 @@ function Editor(self, state) {
 }
 
 setObjectMethods(Editor, {
-    'restore': function () {
+    restore: function () {
         this.value = localStorage.getItem('session');
         return this;
     },
-    'save': function () {
+    save: function () {
         localStorage.setItem('session', this.value);
         return this;
     }

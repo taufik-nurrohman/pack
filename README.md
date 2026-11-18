@@ -7,7 +7,17 @@ Usage
 ~~~ js
 import f from '@taufik-nurrohman/pack';
 
-f.forEachArray([1, 2, 3, 4], function (v) { /* … */ });
+const {forEachArray} = f;
+
+forEachArray([1, 2, 3, 4], function (v) { /* … */ });
+~~~
+
+~~~ js
+import {f} from '@taufik-nurrohman/pack';
+
+const {forEachArray} = f;
+
+forEachArray([1, 2, 3, 4], function (v) { /* … */ });
 ~~~
 
 ~~~ js

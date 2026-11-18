@@ -1,9 +1,11 @@
-import {isFunction} from '../is';
+import {isArray, isBoolean, isFloat, isFunction, isInteger, isNull, isNumeric, isObject, isString} from '../is';
 import {toCount} from '../to';
 
 function _toIterator(v) {
     return v[Symbol.iterator]();
 }
+
+export const forEach = forEachObject;
 
 export const forEachArray = function (array, at) {
     for (let i = 0, j = toCount(array), v; i < j; ++i) {
@@ -83,6 +85,26 @@ export const letValueInMap = (k, map) => map.delete(k);
 export const onAnimationsEnd = (node, task) => {
     return (isFunction(node.getAnimations) ? Promise.all(node.getAnimations().map(v => v.finished)).then(task) : task()), node;
 };
+
+export const php = {};
+
+// TODO
+php.is_array = isArray;
+php.is_bool = isBoolean;
+php.is_float = isFloat;
+php.is_int = isInteger;
+php.is_null = isNull;
+php.is_numeric = isNumeric;
+php.is_object = isObject;
+php.is_string = isString;
+php.ltrim = function (str, s = "") {};
+php.rtrim = function (str, s = "") {};
+php.strcspn = function (str, s = "", i = 0) {};
+php.stripos = function (str, s = "", i = 0) {};
+php.strpos = function (str, i = 0) {};
+php.strspn = function (str, s = "", i = 0) {};
+php.strstr = function (str, s = "", before) {};
+php.trim = function (str, s = "") {};
 
 export const setObjectAttributes = function (of, attributes, asStaticAttributes) {
     if (!asStaticAttributes) {
