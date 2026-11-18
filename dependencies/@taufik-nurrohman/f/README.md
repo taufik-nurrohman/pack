@@ -19,7 +19,14 @@ Methods
 
 ### forEach(object, at)
 
-This is an alias of `forEachObject(object, at)`.
+~~~ js
+forEach(object, function (value, key) {
+    return -1; // Delete entry `key`
+    return 0; // Break
+    return 1; // Continue
+    return; // Continue
+});
+~~~
 
 ### forEachArray(array, at)
 
@@ -45,14 +52,7 @@ forEachMap(map, function (value, key) {
 
 ### forEachObject(object, at)
 
-~~~ js
-forEachObject(object, function (value, key) {
-    return -1; // Delete entry `key`
-    return 0; // Break
-    return 1; // Continue
-    return; // Continue
-});
-~~~
+This is an alias of `forEach(object, at)`.
 
 ### forEachSet(set, at)
 

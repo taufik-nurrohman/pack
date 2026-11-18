@@ -1,5 +1,7 @@
 export const isArray = x => Array.isArray(x);
-export const isBoolean = x => false === x || true === x;
+export const isBool = x => false === x || true === x;
+export const isBoolean = isBool;
+export const isCallable = (x, parent) => isFunction(x) || isString(x) && isFunction((parent || window)[x]);
 export const isDefined = x => 'undefined' !== typeof x;
 export const isFloat = x => isNumber(x) && 0 !== x % 1;
 export const isFunction = x => 'function' === typeof x;
@@ -22,7 +24,7 @@ export const isObject = (x, isPlain = true) => {
     }
     return isPlain ? isInstance(x, Object, 1) : true;
 };
-export const isScalar = x => isBoolean(x) || isNumber(x) || isString(x);
+export const isScalar = x => isBool(x) || isNumber(x) || isString(x);
 export const isSet = x => isDefined(x) && !isNull(x);
 export const isString = x => 'string' === typeof x;
 export const isVoid = x => {

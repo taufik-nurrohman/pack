@@ -3,9 +3,18 @@
 import * as sass from 'sass';
 import pug from 'pug';
 import yargs from 'yargs';
-import { build } from 'esbuild';
-import { format } from 'prettier';
-import { hideBin } from 'yargs/helpers';
+
+import {
+    build
+} from 'esbuild';
+
+import {
+    format
+} from 'prettier';
+
+import {
+    hideBin
+} from 'yargs/helpers';
 
 import {
     copyFile,

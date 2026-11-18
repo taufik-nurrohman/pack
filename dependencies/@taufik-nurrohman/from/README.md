@@ -12,8 +12,6 @@ console.log(fromHTML('<a>'));
 Methods
 -------
 
-### fromArray(array)
-
 ### fromHTML(string, escapeQuote = false)
 
 ### fromJSON(string)

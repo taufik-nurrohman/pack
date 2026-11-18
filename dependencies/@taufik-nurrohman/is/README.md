@@ -19,7 +19,18 @@ Methods
 
 ### isArray(any)
 
+### isBool(any)
+
 ### isBoolean(any)
+
+This is an alias of `isBool(any)`.
+
+### isCallable(any, parent = window)
+
+~~~ js
+console.log(isCallable('parseInt'));
+console.log(isCallable(parseInt));
+~~~
 
 ### isDefined(any)
 

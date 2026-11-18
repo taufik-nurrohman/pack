@@ -1,7 +1,7 @@
 import {fromStates, fromValue} from '../from';
-import {isArray, isNumber, isNumeric, isObject, isSet, isString} from '../is';
+import {isArray, isInteger, isNumber, isNumeric, isObject, isSet, isString} from '../is';
 
-export const toArray = x => isArray(x) ? x : [x];
+export const toArray = x => Array.from(x);
 export const toArrayKey = (x, data) => {
     let i = data.indexOf(x);
     return -1 !== i ? i : null;
@@ -10,14 +10,16 @@ export const toArrayValue = (x, data) => {
     let i = data.indexOf(x);
     return -1 !== i ? data[i] : null;
 };
-export const toBoolean = x => !!x;
+export const toArrayCount = x => x.length;
+export const toBool = x => !!x;
+export const toBoolean = toBool;
 export const toCaseCamel = x => x.replace(/[-_.](\w)/g, (m0, m1) => toCaseUpper(m1));
 export const toCaseKebab = (x, separator = '-') => x.replace(/[A-Z]/g, m0 => separator + toCaseLower(m0)).replace(/\W+/g, separator);
 export const toCaseLower = x => x.toLowerCase();
 export const toCasePascal = x => x.replace(/(?:^|[-_.])(\w)/g, (m0, m1) => toCaseUpper(m1));
 export const toCaseUpper = x => x.toUpperCase();
 export const toCeil = x => isNumber(x) ? Math.ceil(x) : null;
-export const toCount = x => x.length;
+export const toCount = x => isInteger(x.length) ? x.length : (isInteger(x.size) ? x.size : 0);
 export const toEdge = (x, edges) => {
     if (isSet(edges[0]) && x < edges[0]) {
         return edges[0];
@@ -36,11 +38,12 @@ export const toHTML = (x, restoreQuote = true) => {
     }
     return x;
 };
+export const toIterator = x => x[Symbol.iterator]();
 export const toJSON = x => JSON.stringify(x);
 export const toMapCount = x => x.size;
 export const toNumber = (x, base = 10) => base ? parseInt(x, base) : parseFloat(x);
 export const toObject = x => Object.create(x);
-export const toObjectCount = x => toCount(toObjectKeys(x));
+export const toObjectCount = x => toArrayCount(toObjectKeys(x));
 export const toObjectEntries = x => Object.entries(x);
 export const toObjectKey = (x, data) => {
     for (let key in data) {
@@ -76,11 +79,12 @@ export const toQuery = x => {
         v = true !== v ? '=' + toURL(fromValue(v)) : "";
         list.push(k + v);
     }
-    return toCount(list) ? '?' + list.join('&') : null;
+    return toArrayCount(list) ? '?' + list.join('&') : null;
 };
 export const toRound = x => isNumber(x) ? Math.round(x) : null;
 export const toSetCount = x => x.size;
 export const toString = (x, base = 10) => isNumber(x) ? x.toString(base) : "" + x;
+export const toStringCount = x => x.length;
 export const toURL = x => encodeURIComponent(x);
 export const toValue = x => {
     if (isArray(x)) {

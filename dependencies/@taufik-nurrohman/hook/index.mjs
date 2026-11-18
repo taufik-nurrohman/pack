@@ -1,6 +1,14 @@
-import {forEachArray} from '../f';
-import {isSet} from '../is';
-import {toCount} from '../to';
+import {
+    forEachArray
+} from '../f';
+
+import {
+    isSet
+} from '../is';
+
+import {
+    toArrayCount
+} from '../to';
 
 export function hook($, $$) {
     $$ = $$ || $;
@@ -22,7 +30,7 @@ export function hook($, $$) {
         }
         if (isSet(hooks[event])) {
             if (isSet(task)) {
-                let j = toCount(hooks[event]);
+                let j = toArrayCount(hooks[event]);
                 // Clean-up empty hook(s)
                 if (0 === j) {
                     delete hooks[event];

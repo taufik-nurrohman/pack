@@ -43,5 +43,5 @@
     "test-module-not": "node index.mjs --from=test/from --module=false --to=test/to"
   },
   "type": "module",
-  "version": "2.3.1"
+  "version": "3.0.0"
 }

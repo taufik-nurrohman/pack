@@ -17,11 +17,17 @@ Methods
 
 ### toArray(any)
 
+### toArrayCount(array)
+
 ### toArrayKey(value, array)
 
 ### toArrayValue(key, array)
 
+### toBool(any)
+
 ### toBoolean(any)
+
+This is an alias of `toBool(any)`.
 
 ### toCaseCamel(string)
 
@@ -35,7 +41,7 @@ Methods
 
 ### toCeil(number)
 
-### toCount(array|string)
+### toCount(any)
 
 ### toEdge(number, [min, max])
 
@@ -44,6 +50,8 @@ Methods
 ### toFloor(number)
 
 ### toHTML(string, restoreQuote = true)
+
+### toIterator(map|set)
 
 ### toJSON(any)
 
@@ -74,6 +82,8 @@ Methods
 ### toString(any)
 
 ### toString(number, base = 10)
+
+### toStringCount(string)
 
 ### toURL(string)
 

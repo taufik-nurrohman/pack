@@ -1,4 +1,6 @@
-import {isSet} from '../is';
+import {
+    isSet
+} from '../is';
 
 export const event = (name, options = {}, cache) => {
     if (cache && isSet(events[name])) {

@@ -17,6 +17,8 @@ Methods
 
 ### hasObjectKey(key, object)
 
+This is an alias of `hasKey(key, object)`.
+
 ### hasObjectValue(key, object)
 
 ### hasString(x, string, ?start)

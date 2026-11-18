@@ -1,43 +1,24 @@
-import {isArray, isBoolean, isFloat, isFunction, isInteger, isNull, isNumeric, isObject, isString} from '../is';
-import {toCount} from '../to';
+import {
+    isArray,
+    isBool,
+    isCallable,
+    isFloat,
+    isFunction,
+    isInteger,
+    isNull,
+    isNumeric,
+    isObject,
+    isString
+} from '../is';
+import { isCallable } from '../is/index.mjs';
 
-function _toIterator(v) {
-    return v[Symbol.iterator]();
-}
+import {
+    toArrayCount,
+    toIterator,
+    toStringCount
+} from '../to';
 
-export const forEach = forEachObject;
-
-export const forEachArray = function (array, at) {
-    for (let i = 0, j = toCount(array), v; i < j; ++i) {
-        v = at.call(array, array[i], i);
-        if (-1 === v) {
-            array.splice(i--, 1);
-            --j;
-            continue;
-        } else if (0 === v) {
-            break;
-        }
-    }
-    return array;
-};
-
-export const forEachMap = function (map, at) {
-    let items = _toIterator(map),
-        item = items.next();
-    while (!item.done) {
-        let [k, v] = item.value;
-        v = at.call(map, v, k);
-        if (-1 === v) {
-            letValueInMap(k, map);
-        } else if (0 === v) {
-            break;
-        }
-        item = items.next();
-    }
-    return map;
-};
-
-export const forEachObject = function (object, at) {
+export const forEach = function (object, at) {
     let v;
     for (let k in object) {
         if (!Object.hasOwn(object, k)) {
@@ -54,8 +35,40 @@ export const forEachObject = function (object, at) {
     return object;
 };
 
+export const forEachArray = function (array, at) {
+    for (let i = 0, j = toArrayCount(array), v; i < j; ++i) {
+        v = at.call(array, array[i], i);
+        if (-1 === v) {
+            array.splice(i--, 1);
+            --j;
+            continue;
+        } else if (0 === v) {
+            break;
+        }
+    }
+    return array;
+};
+
+export const forEachMap = function (map, at) {
+    let items = toIterator(map),
+        item = items.next();
+    while (!item.done) {
+        let [k, v] = item.value;
+        v = at.call(map, v, k);
+        if (-1 === v) {
+            letValueInMap(k, map);
+        } else if (0 === v) {
+            break;
+        }
+        item = items.next();
+    }
+    return map;
+};
+
+export const forEachObject = forEach;
+
 export const forEachSet = function (set, at) {
-    let items = _toIterator(set),
+    let items = toIterator(set),
         item = items.next();
     while (!item.done) {
         let k, v = item.value;
@@ -90,7 +103,8 @@ export const php = {};
 
 // TODO
 php.is_array = isArray;
-php.is_bool = isBoolean;
+php.is_bool = isBool;
+php.is_callable = isCallable;
 php.is_float = isFloat;
 php.is_int = isInteger;
 php.is_null = isNull;
@@ -101,6 +115,7 @@ php.ltrim = function (str, s = "") {};
 php.rtrim = function (str, s = "") {};
 php.strcspn = function (str, s = "", i = 0) {};
 php.stripos = function (str, s = "", i = 0) {};
+php.strlen = str => toStringCount(str);
 php.strpos = function (str, i = 0) {};
 php.strspn = function (str, s = "", i = 0) {};
 php.strstr = function (str, s = "", before) {};
@@ -110,7 +125,7 @@ export const setObjectAttributes = function (of, attributes, asStaticAttributes)
     if (!asStaticAttributes) {
         of = getPrototype(of);
     }
-    return forEachObject(attributes, (v, k) => {
+    return forEach(attributes, (v, k) => {
         Object.defineProperty(of, k, v);
     }), of;
 };
@@ -119,7 +134,7 @@ export const setObjectMethods = function (of, methods, asStaticMethods) {
     if (!asStaticMethods) {
         of = getPrototype(of);
     }
-    return forEachObject(methods, (v, k) => {
+    return forEach(methods, (v, k) => {
         of[k] = v;
     }), of;
 };

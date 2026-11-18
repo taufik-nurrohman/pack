@@ -1,16 +1,37 @@
-import {forEachArray, forEachObject} from '../f';
-import {fromJSON, fromURL, fromValue} from '../from';
-import {isArray, isInstance, isNumber, isObject, isSet, isString} from '../is';
-import {toCaseLower, toCount, toJSON, toString as _toString, toURL, toValue} from '../to';
+import {
+    forEachArray,
+    forEachObject
+} from '../f';
+
+import {
+    fromJSON,
+    fromURL,
+    fromValue
+} from '../from';
+
+import {
+    isArray,
+    isInstance,
+    isNumber,
+    isObject,
+    isSet,
+    isString
+} from '../is';
+
+import {
+    toArray,
+    toArrayCount,
+    toCaseLower,
+    toJSON,
+    toString as toValueString,
+    toURL,
+    toValue
+} from '../to';
 
 let theCookies = 0;
 
 function _false(v) {
     return !v && "" !== v && 0 !== v;
-}
-
-function _toArray(iterable) {
-    return Array.from(iterable);
 }
 
 export const D = document;
@@ -64,7 +85,7 @@ export const getChildFirst = (parent, anyNode) => parent['first' + (anyNode ? ""
 export const getChildLast = (parent, anyNode) => parent['last' + (anyNode ? "" : 'Element') + 'Child'] || null;
 
 export const getChildren = (parent, index, anyNode) => {
-    let children = _toArray(parent['child' + (anyNode ? 'Nodes' : 'ren')]);
+    let children = toArray(parent['child' + (anyNode ? 'Nodes' : 'ren')]);
     return isNumber(index) ? (children[index] || null) : children;
 };
 
@@ -137,11 +158,11 @@ export const getElementIndex = (node, anyNode) => {
     return index;
 };
 
-export const getElements = (query, scope) => _toArray((scope || D).querySelectorAll(query));
+export const getElements = (query, scope) => toArray((scope || D).querySelectorAll(query));
 
 export const getFormElement = nameOrIndex => D.forms[nameOrIndex] || null;
 
-export const getFormElements = () => _toArray(D.forms);
+export const getFormElements = () => toArray(D.forms);
 
 export const getHTML = (node, trim = true) => {
     let state = 'innerHTML';
@@ -160,7 +181,7 @@ export const getID = (node, batch = 'x:') => {
     if (!isSet(theID[batch])) {
         theID[batch] = 0;
     }
-    return batch + _toString(Date.now() + (theID[batch] += 1), 16);
+    return batch + toValueString(Date.now() + (theID[batch] += 1), 16);
 };
 
 export const getName = node => toCaseLower(node && node.nodeName || "") || null;
@@ -512,7 +533,7 @@ export const setDatum = (node, datum, value) => {
 
 export const setElement = (node, content, attributes, options) => {
     node = isString(node) ? D.createElement(node, isString(options) ? {is: options} : options) : node;
-    if (isArray(content) && toCount(content)) {
+    if (isArray(content) && toArrayCount(content)) {
         letHTML(node);
         forEachArray(content, v => setChildLast(node, isString(v) ? setElementText(v) : v));
     } else if (isObject(content)) {
