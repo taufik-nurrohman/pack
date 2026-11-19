@@ -21,6 +21,7 @@
   "description": "Project factory.",
   "exports": "./index.mjs",
   "files": [
+    "f/php.mjs",
     "index.mjs"
   ],
   "homepage": "https://taufik-nurrohman.js.org/pack",

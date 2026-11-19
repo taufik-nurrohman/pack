@@ -1,26 +1,15 @@
 import {
-    isArray,
-    isBool,
-    isCallable,
-    isFloat,
-    isFunction,
-    isInteger,
-    isNull,
-    isNumeric,
-    isObject,
-    isString
+    isFunction
 } from '../is';
-import { isCallable } from '../is/index.mjs';
 
 import {
     toArrayCount,
-    toIterator,
-    toStringCount
+    toIterator
 } from '../to';
 
 export const forEach = function (object, at) {
-    let v;
-    for (let k in object) {
+    let k, v;
+    for (k in object) {
         if (!Object.hasOwn(object, k)) {
             continue;
         }
@@ -98,28 +87,6 @@ export const letValueInMap = (k, map) => map.delete(k);
 export const onAnimationsEnd = (node, task) => {
     return (isFunction(node.getAnimations) ? Promise.all(node.getAnimations().map(v => v.finished)).then(task) : task()), node;
 };
-
-export const php = {};
-
-// TODO
-php.is_array = isArray;
-php.is_bool = isBool;
-php.is_callable = isCallable;
-php.is_float = isFloat;
-php.is_int = isInteger;
-php.is_null = isNull;
-php.is_numeric = isNumeric;
-php.is_object = isObject;
-php.is_string = isString;
-php.ltrim = function (str, s = "") {};
-php.rtrim = function (str, s = "") {};
-php.strcspn = function (str, s = "", i = 0) {};
-php.stripos = function (str, s = "", i = 0) {};
-php.strlen = str => toStringCount(str);
-php.strpos = function (str, i = 0) {};
-php.strspn = function (str, s = "", i = 0) {};
-php.strstr = function (str, s = "", before) {};
-php.trim = function (str, s = "") {};
 
 export const setObjectAttributes = function (of, attributes, asStaticAttributes) {
     if (!asStaticAttributes) {

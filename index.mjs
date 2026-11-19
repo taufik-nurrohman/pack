@@ -11,7 +11,6 @@ import f, {
     letReference,
     letValueInMap,
     onAnimationsEnd,
-    php,
     setObjectAttributes,
     setObjectMethods,
     setPrototype,
@@ -38,6 +37,8 @@ export { default as selection } from '@taufik-nurrohman/selection';
 export { default as tick } from '@taufik-nurrohman/tick';
 export { default as to } from '@taufik-nurrohman/to';
 
+export { default as php } from './f/php.mjs';
+
 export {
     f as default,
     f,
@@ -53,7 +54,6 @@ export {
     letReference,
     letValueInMap,
     onAnimationsEnd,
-    php,
     setObjectAttributes,
     setObjectMethods,
     setPrototype,
